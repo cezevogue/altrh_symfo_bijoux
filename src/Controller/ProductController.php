@@ -36,7 +36,7 @@ class ProductController extends AbstractController
         // 3eme (optionnel)=> tableau d'option
         // Le fait de renseigner ces arguments permet à Symfony d'effectuer les contrôles de validité
         // à savoir les typages de données en liens avec les types d'input de formulaire et le fait que chaque input du type (chaques add() ) correspondent bien à une propriété de la classe
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, ['add'=>true]);
         // $form est un objet instance de Form
         //traitement de la requête
         $form->handleRequest($request); // Request est la classe qui regroupe nos superglobales
@@ -77,7 +77,7 @@ class ProductController extends AbstractController
             $manager->flush();  // on envoie l'objet en BDD (execute )
 
 
-            return $this->redirectToRoute("home");
+            return $this->redirectToRoute("listProduct");
 
 
         }
@@ -115,12 +115,55 @@ class ProductController extends AbstractController
      *
      * @Route("/edit/{id}", name="editProduct")
      */
-    public function editProduct()
+    public function editProduct(Product $product, Request $request, EntityManagerInterface $manager)
     {
+
+        // lorsque un paramètre id est passé sur l'url et l'on injecte en dépendance une entité voulue (ici Product), symfony rempli automatique l'objet $product de ses données sur l'id passé (SELECT * FROM product WHERE id={id})
+        //dd($product);
+        // nous sommes en modification donc pas d'instanciation de nouvel objet. (pas de new Product)
+        // on récupère ses donnés de la BDD
+        $form=$this->createForm(ProductType::class, $product, ['edit'=>true]);
+
+        $form->handleRequest($request);
+       // dd($product);
+
+        if ($form->isSubmitted() && $form->isValid()){
+
+            $picture_edit_file=$form->get('picture_edit')->getData();
+
+            // on verifie si le champs picture_edit a été saisi. alors on modifie la propriété picture
+            // on copie le nouveau fichier photo et supprime le précédent
+            if ($picture_edit_file){
+
+                $picture_bdd=date('YmdHis').$picture_edit_file->getClientOriginalName();
+
+                unlink($this->getParameter('upload_directory').'/'.$product->getPicture());
+                $picture_edit_file->move($this->getParameter('upload_directory'), $picture_bdd);
+
+                $product->setPicture($picture_bdd);
+
+            }
+
+            $manager->persist($product);
+            $manager->flush();
+
+            return $this->redirectToRoute('listProduct');
+
+
+
+
+
+
+
+        }
+
+
+
 
 
         return $this->render('product/editProduct.html.twig', [
-
+            'form'=>$form->createView(),
+            'product'=>$product
 
         ]);
     }

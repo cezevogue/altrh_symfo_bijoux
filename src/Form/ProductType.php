@@ -17,6 +17,10 @@ class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['add']==true){
+
+
+
         $builder
             ->add('title', TextType::class  , [
                 'required'=>false,
@@ -43,7 +47,8 @@ class ProductType extends AbstractType
             ->add('picture', FileType::class, [
                 'required'=>false,
                 'attr'=> [
-                    'placeholder'=>'Saisissez le nom du produit'
+                    'placeholder'=>'Saisissez le nom du produit',
+                    'onChange'=>'loadFile(event)'
                 ],
                 'label'=>'Photo du produit',
                 'constraints'=>[
@@ -61,12 +66,67 @@ class ProductType extends AbstractType
             ])
             ->add('Enregistrer', SubmitType::class)
         ;
+        }else{
+
+            $builder
+                ->add('title', TextType::class  , [
+                    'required'=>false,
+                    'attr'=> [
+                        'placeholder'=>'Saisissez le nom du produit',
+//                    'class'=>'bg-warning text-danger'
+                    ],
+                    'label'=>'Nom du produit'
+                ]  )
+                ->add('price', NumberType::class, [
+                    'required'=>false,
+                    'attr'=> [
+                        'placeholder'=>'Saisissez le prix du produit'
+                    ],
+                    'label'=>'Prix du produit'
+                ])
+                ->add('description', TextareaType::class, [
+                    'required'=>false,
+                    'attr'=> [
+                        'placeholder'=>'Saisissez une description du produit'
+                    ],
+                    'label'=>'Description du produit'
+                ])
+                ->add('picture_edit', FileType::class, [
+                    'required'=>false,
+                    'attr'=> [
+                        'placeholder'=>'Saisissez le nom du produit',
+                         'onChange'=>'loadFile(event)'
+                    ],
+                    'label'=>'Photo du produit',
+                    'constraints'=>[
+                        new File([
+                            'mimeTypes'=>[
+                                "image/png",
+                                "image/jpg",
+                                "image/jpeg",
+                                "image/webp",
+                                "image/gif"
+                            ],
+                            'mimeTypesMessage'=>"Extensions autorisées: png, jpg, jpeg, webp et gif"
+                        ])
+                    ]
+                ])
+                ->add('Enregistrer', SubmitType::class)
+            ;
+
+
+
+
+
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Product::class,
+            'add'=>false,
+            'edit'=>false
         ]);
     }
 }

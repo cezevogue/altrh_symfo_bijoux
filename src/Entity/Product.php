@@ -44,6 +44,8 @@ class Product
      */
     private $picture;
 
+    public $picture_edit;
+
     public function getId(): ?int
     {
         return $this->id;
