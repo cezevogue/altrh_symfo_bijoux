@@ -56,7 +56,13 @@
         </div>
     </nav>
     <div class="container">
-
+        {% for type, messages in app.flashes  %}
+            {% for message in messages %}
+                <div class="alert w-50 mx-auto alert-{{ type}}  text-center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         {% block body %}{% endblock %}
 
     </div>

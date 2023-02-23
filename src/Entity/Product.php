@@ -20,31 +20,36 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Ce champs est obligatoire")
      */
     private $title;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank(message="Ce champs est obligatoire")
-     * @Assert\Positive(message="Le prix doit être supérieur à zéro")
-     * @Assert\Type(type="integer", message="Saisissez un entier")
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      */
     private $price;
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(message="Ce champs est obligatoire")
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
+     * @Assert\Positive(message="Le prix doit etre superior a zero")
+     * @Assert\Type(type="integer"
+     * , message="Saississez en entier")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Ce champs est obligatoire")
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      */
     private $picture;
 
     public $picture_edit;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
+     */
+    private $category;
 
     public function getId(): ?int
     {
@@ -95,6 +100,18 @@ class Product
     public function setPicture(string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

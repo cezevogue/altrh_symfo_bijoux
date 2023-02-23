@@ -68,7 +68,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="{{ path('addProduct') }}">Ajout produit</a>
                     <a class="collapse-item" href="{{ path('listProduct') }}">Voir les produits</a>
-                    <a class="collapse-item" href="">Gestion catégorie produit</a>
+                    <a class="collapse-item" href="{{ path('category') }}">Gestion catégories produit</a>
                     <a class="collapse-item" href="">Gestion état produit</a>
                     <a class="collapse-item" href="">Gestion Achat</a>
                 </div>
@@ -218,10 +218,16 @@
             </nav>
             <!-- End of Topbar -->
             <div class="container col-3 ">
+                {# app.flashes contient les addFlash envoyés en controller, c'est un tableau multidimensionnel
+                qui a pour 1ere dimension le type de message (ex:success, danger, info....) et en sous dimension les messages contenu pour ces types#}
+                {% for type, messages in app.flashes  %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ type}}  text-center">
+                       {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
 
-                <div class="alert  text-center">
-
-                </div>
 
 
             </div>

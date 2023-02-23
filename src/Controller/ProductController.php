@@ -76,6 +76,7 @@ class ProductController extends AbstractController
             $manager->persist($product); // on lui demande de persister l'objet (préparation de la requête)
             $manager->flush();  // on envoie l'objet en BDD (execute )
 
+            $this->addFlash('success', 'Produit ajouté');
 
             return $this->redirectToRoute("listProduct");
 
@@ -147,6 +148,8 @@ class ProductController extends AbstractController
             $manager->persist($product);
             $manager->flush();
 
+            $this->addFlash('success', 'Produit modifié');
+
             return $this->redirectToRoute('listProduct');
 
 
@@ -173,9 +176,15 @@ class ProductController extends AbstractController
      *
      * @Route("/delete/{id}", name="deleteProduct")
      */
-    public function deleteProduct()
+    public function deleteProduct(Product $product, EntityManagerInterface $manager)
     {
+        // on supprime la photo du produit dans le dossier d'upload
+        unlink($this->getParameter('upload_directory').'/'.$product->getPicture());
 
+        $manager->remove($product);
+        $manager->flush();
+
+        $this->addFlash('success', 'Produit supprimé');
 
         return $this->redirectToRoute('listProduct');
     }

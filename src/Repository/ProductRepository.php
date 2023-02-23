@@ -7,12 +7,12 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Product>
  *
- * @method Product|null find($id, $lockMode = null, $lockVersion = null)// SELECT * FROM product WHERE id=...;
- * @method Product|null findOneBy(array $criteria, array $orderBy = null)// SELECT * FROM product WHERE colonne=....;
- * @method Product[]    findAll() // SELECT * FROM product;
- * @method Product[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)// SELECT * FROM product WHERE colonne=...;
+ *
+ * @method Product|null find($id, $lockMode = null, $lockVersion = null) // SELECT * FROM PRODUCT WHERE id = ...
+ * @method Product|null findOneBy(array $criteria, array $orderBy = null) // SELECT * FROM PRODUCT WHERE COLONNE = ...
+ * @method Product[]    findAll() // SELECT * FROM PRODUCT
+ * @method Product[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) // SELECT * FROM PRODUCT WHERE colonne = ...
  */
 class ProductRepository extends ServiceEntityRepository
 {
@@ -21,7 +21,7 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function save(Product $entity, bool $flush = false): void
+    public function add(Product $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
