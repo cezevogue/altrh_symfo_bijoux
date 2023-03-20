@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,15 +28,17 @@ class Product
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message="Ce champ est obligatoire")
+     * @Assert\Positive(message="Le prix doit etre superior a zero")
+     * @Assert\Type(type="integer"
+     * , message="Saississez en entier")
      */
     private $price;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message="Ce champ est obligatoire")
-     * @Assert\Positive(message="Le prix doit etre superior a zero")
-     * @Assert\Type(type="integer"
-     * , message="Saississez en entier")
+     *
+     *
      */
     private $description;
 
@@ -50,6 +54,16 @@ class Product
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
      */
     private $category;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Material::class, inversedBy="products")
+     */
+    private $materials;
+
+    public function __construct()
+    {
+        $this->materials = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,6 +126,30 @@ class Product
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Material>
+     */
+    public function getMaterials(): Collection
+    {
+        return $this->materials;
+    }
+
+    public function addMaterial(Material $material): self
+    {
+        if (!$this->materials->contains($material)) {
+            $this->materials[] = $material;
+        }
+
+        return $this;
+    }
+
+    public function removeMaterial(Material $material): self
+    {
+        $this->materials->removeElement($material);
 
         return $this;
     }

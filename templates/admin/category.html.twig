@@ -2,8 +2,32 @@
 
 {% block body %}
 <h1>Gestion catégories</h1>
+    {# on interpole la vue du formulaire renvoyée dans le tableau de données de la méthode render dans l'admin controller sur la méthode category #}
+   {{ form(form) }}
 
 
+    <table class="table table-dark table-striped mt-5">
+        <thead>
+        <tr>
+            <th>TITRE</th>
+            <th>ACTIONS</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for category in categories %}
+
+        <tr>
+            <td>{{ category.title }}</td>
+            <td>
+                <a href="{{ path('editCategory', {'id': category.id }) }}" class="btn btn-info">Modifier</a>
+                <a href="{{ path('deleteCategory', {'id': category.id }) }}" class="btn btn-danger">Supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
 
 {% endblock %}
 
