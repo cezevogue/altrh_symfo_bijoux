@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\Material;
 use App\Entity\Product;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -43,6 +44,16 @@ class ProductType extends AbstractType
                 "class"=>Category::class,
                 "choice_label"=>"title",
                 "label"=>"Catégorie"
+            ])
+            ->add('materials', EntityType::class, [
+                "class"=>Material::class,
+                "choice_label"=>"title",
+                "label"=>"Matières",
+                'multiple'=>true,
+                'attr'=>[
+                    'class'=>"select2"
+
+                ]
             ])
             ->add('description', TextareaType::class, [
                 'required'=>false,
@@ -95,6 +106,16 @@ class ProductType extends AbstractType
                     "class"=>Category::class,
                     "choice_label"=>"title",
                     "label"=>"Catégorie"
+                ])
+                ->add('materials', EntityType::class, [
+                    "class"=>Material::class,
+                    "choice_label"=>"title",
+                    "label"=>"Matières",
+                    'multiple'=>true,
+                    'attr'=>[
+                        'class'=>"select2"
+
+                    ]
                 ])
                 ->add('description', TextareaType::class, [
                     'required'=>false,
