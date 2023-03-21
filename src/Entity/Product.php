@@ -61,9 +61,15 @@ class Product
      */
     private $materials;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Achat::class, mappedBy="product")
+     */
+    private $achats;
+
     public function __construct()
     {
         $this->materials = new ArrayCollection();
+        $this->achats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +157,36 @@ class Product
     public function removeMaterial(Material $material): self
     {
         $this->materials->removeElement($material);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Achat>
+     */
+    public function getAchats(): Collection
+    {
+        return $this->achats;
+    }
+
+    public function addAchat(Achat $achat): self
+    {
+        if (!$this->achats->contains($achat)) {
+            $this->achats[] = $achat;
+            $achat->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAchat(Achat $achat): self
+    {
+        if ($this->achats->removeElement($achat)) {
+            // set the owning side to null (unless already changed)
+            if ($achat->getProduct() === $this) {
+                $achat->setProduct(null);
+            }
+        }
 
         return $this;
     }
